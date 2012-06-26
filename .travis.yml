@@ -11,7 +11,6 @@ install:
   - pip install --use-mirrors -q Django==$DJANGO_VERSION .
   - sudo apt-get install -yq postgresql-9.1-postgis
   - psql -U postgres -c 'CREATE DATABASE template_postgis;'
-  - psql -U postgres -d template_postgis -c 'CREATE LANGUAGE plpgsql;'
   - psql -U postgres -d template_postgis -c 'CREATE EXTENSION hstore;'
   - psql -U postgres -d template_postgis -f /usr/share/postgresql/9.1/contrib/postgis.sql
   - psql -U postgres -d template_postgis -f /usr/share/postgresql/9.1/contrib/spatial_ref_sys.sql
