@@ -1,0 +1,23 @@
+language: python
+python:
+  - "2.6"
+  - "2.7"
+
+env:
+  - DJANGO_VERSION=1.4
+  - DJANGO_VERSION=1.3.1
+
+install:
+  - pip install --use-mirrors -q Django==$DJANGO_VERSION .
+  - sudo apt-get install -q postgresql-9.1-postgis
+  - psql -U postgres -c 'CREATE DATABASE template_postgis;'
+  - psql -U postgres -d template_postgis -c 'CREATE LANG plpgsql;'
+  - psql -U postgres -d template_postgis -f /usr/share/postgresql/9.1/contrib/postgis.sql
+  - psql -U postgres -d template_postgis -f /usr/share/postgresql/9.1/contrib/spatial_ref_sys.sql
+
+before_script:
+  - psql -U postgres -c 'CREATE USER geomium WITH PASSWORD ge0m1um;' -U postgres
+  - psql -U postgres -c 'CREATE DATABASE geomium WITH TEMPLATE template_postgis;'
+  - psql -U postgres -c 'GRANT ALL ON DATABASE geomium TO geomium;'
+
+script: python example/manage.py cities --import=all
